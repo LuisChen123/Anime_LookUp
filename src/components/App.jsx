@@ -1,0 +1,94 @@
+import React, { useState, useEffect } from 'react';
+
+import Axios from 'axios';
+
+import { makeStyles, Typography, Paper, Divider, Grid } from '@material-ui/core';
+
+import SearchBar from './searchBar';
+
+import AnimeCardsBox from './AnimeCardsBox';
+
+const useStyles = makeStyles(theme => ({
+  container: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(12, 1fr)',
+    gridGap: theme.spacing(3)
+  },
+  paper: {
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    whiteSpace: 'nowrap',
+    marginBottom: theme.spacing(1)
+  },
+  divider: {
+    margin: theme.spacing(2, 0)
+  },
+  Bolder: {
+    fontWeight: 'bolder'
+  }
+}));
+
+export default function App() {
+  const classes = useStyles();
+  const [keyWord, setKeyWord] = useState('');
+  const [returnedData, setReturnedData] = useState([]);
+  const [cardNumbers, setCardNumbers] = useState(16);
+  const [wait, setWait] = useState(false);
+
+  const getAnimatData = () => {
+    Axios.get(`https://api.jikan.moe/v3/search/anime?q=${keyWord}&limit=${cardNumbers}`)
+      .then(response => {
+        setWait(false);
+        setReturnedData(response.data.results);
+        console.log(response);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const handleButtonSend = () => {
+    if (window.event.keyCode === 13 && keyWord.length < 3) {
+      window.alert('must longer then 3 char');
+    } else {
+      setWait(true);
+      getAnimatData();
+    }
+  };
+
+  const handleKeyDown = inputValue => {
+    setKeyWord(inputValue);
+    if (window.event.keyCode === 13 && keyWord.length < 3) {
+      window.alert('must longer then 3 char');
+    } else if (window.event.keyCode === 13 && (keyWord.length > 3 || keyWord.length === 3)) {
+      setWait(true);
+      getAnimatData();
+    }
+  };
+
+  return (
+    <div>
+      <Typography className={classes.Bolder} variant="h4" align="center" color="primary">
+        My Anime List
+      </Typography>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <SearchBar
+            handleSearch={handleKeyDown}
+            handleButtonSend={handleButtonSend}
+            waitReturn={wait}
+          />
+        </Grid>
+        <Grid item xs={1} />
+        <Grid item xs={10}>
+          <Paper className={classes.paper}>
+            {returnedData.length > 0 ? <AnimeCardsBox animatData={returnedData} /> : 'nodata'}
+          </Paper>
+        </Grid>
+        <Grid item xs={1} />
+      </Grid>
+      <Divider className={classes.divider} />
+    </div>
+  );
+}

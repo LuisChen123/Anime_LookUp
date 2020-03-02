@@ -7,6 +7,7 @@ import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import SendIcon from '@material-ui/icons/Send';
 import IconButton from '@material-ui/core/IconButton';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -55,13 +56,18 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up('md')]: {
       width: '100%'
     }
+  },
+  root: {
+    width: '100%',
+    '& > * + *': {
+      marginTop: theme.spacing(2)
+    }
   }
 }));
 
 export default function SearchBar(props) {
   const classes = useStyles();
   const [inputValue, setInputValue] = useState('');
-
   return (
     <div className={classes.grow}>
       <AppBar position="static">
@@ -90,6 +96,9 @@ export default function SearchBar(props) {
           </IconButton>
         </Toolbar>
       </AppBar>
+      <div className={classes.root}>
+        <LinearProgress color="secondary" variant={props.waitReturn ? 'indeterminate' : null} />
+      </div>
     </div>
   );
 }
