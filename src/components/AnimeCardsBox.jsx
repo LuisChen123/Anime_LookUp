@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { makeStyles, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 
 import AnimeCards from './childComponents/AnimeCards';
 
