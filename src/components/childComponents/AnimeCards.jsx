@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -9,8 +10,8 @@ import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import CardActions from '@material-ui/core/CardActions';
-
-import { useState } from 'react';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -38,21 +39,74 @@ const useStyles = makeStyles(theme => ({
 
 export default function AnimeCards(props) {
   const classes = useStyles();
-  const [fav, setFav] = useState(false);
+  const [fav, setFav] = useState(true);
+  const [confirm, setComfirm] = useState(false);
+  const [message, setMessage] = useState('');
+  const [state, setState] = React.useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'center'
+  });
+  const { vertical, horizontal, open } = state;
 
-  const handleFav = id => {
-    if (fav === true) {
-      // send ajax to back end
-      console.log('delete to database ' + id);
-      setFav(!fav);
-    } else {
-      // send ajax to back end
-      console.log('add to database ' + id);
-      setFav(!fav);
+  const handleClose = () => {
+    setState({ ...state, open: false });
+  };
+
+  const sendRequest = (type, id) => {
+    if (type === 'add') {
+      Axios.get(`api/add?id=${id}`)
+        .then(function(response) {
+          setComfirm(false);
+          setState({ open: true, vertical: 'top', horizontal: 'center' });
+          setMessage(response.data);
+        })
+        .catch(function(error) {
+          setMessage(error);
+        });
+    } else if (type === 'delete') {
+      Axios.delete(`api/delete?id=${id}`)
+        .then(function(response) {
+          setComfirm(false);
+          setState({ open: true, vertical: 'top', horizontal: 'center' });
+          setMessage(response.data);
+        })
+        .catch(function(error) {
+          setMessage(error);
+        });
     }
   };
+
+  const handleFav = id => {
+    setComfirm(true);
+    if (fav === true) {
+      // send ajax to back end
+      console.log(`add to database ${id}`);
+      setFav(!fav);
+      sendRequest('add', id);
+    } else {
+      // send ajax to back end
+      console.log(`delete from database ${id}`);
+      setFav(!fav);
+      sendRequest('delete', id);
+    }
+  };
+
   return (
     <Card className={classes.root}>
+      <div>
+        <Snackbar
+          autoHideDuration={6000}
+          anchorOrigin={{ vertical, horizontal }}
+          key={`${vertical},${horizontal}`}
+          open={open}
+          onClose={handleClose}
+        >
+          <Alert onClose={handleClose} severity="success">
+            {message}
+          </Alert>
+        </Snackbar>
+      </div>
       <CardActionArea>
         <CardMedia
           component="img"
@@ -75,8 +129,12 @@ export default function AnimeCards(props) {
         </CardContent>
       </CardActionArea>
       <CardActions className={classes.autoCenter}>
-        <IconButton aria-label="add" onClick={() => handleFav(props.animatData.mal_id)}>
-          {fav ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+        <IconButton
+          aria-label="add"
+          disabled={confirm}
+          onClick={() => handleFav(props.animatData.mal_id)}
+        >
+          {fav ? <FavoriteBorderIcon /> : <FavoriteIcon />}
         </IconButton>
       </CardActions>
     </Card>
