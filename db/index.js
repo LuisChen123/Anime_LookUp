@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
-const DB_URL = 'mongodb://<dbuser>:<dbpassword>@ds241977.mlab.com:41977/heroku_jx795bwm';
+const DB_URL =
+  'mongodb+srv://luis:c82806817@cluster0-vv08g.mongodb.net/test?retryWrites=true&w=majority';
 /** * mongoDb Url */
 mongoose.connect(DB_URL);
 
