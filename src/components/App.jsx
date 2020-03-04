@@ -59,9 +59,9 @@ export default function App() {
 
   const handleKeyDown = inputValue => {
     setKeyWord(inputValue);
-    if (window.event.keyCode === 13 && keyWord.length < 2) {
+    if (window.event.keyCode === 13 && keyWord.length === 0) {
       window.alert('must longer then 2 char');
-    } else if (window.event.keyCode === 13 && (keyWord.length > 3 || keyWord.length === 3)) {
+    } else if (window.event.keyCode === 13 && keyWord.length > 0) {
       setWait(true);
       getAnimatData();
     }
