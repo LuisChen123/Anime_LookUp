@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "keywords": [
-    "example",
     "heroku"
   ],
   "engines": {
