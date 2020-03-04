@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const DB_URL = 'mongodb://127.0.0.1:27017/jikan';
+const DB_URL = 'mongodb://<dbuser>:<dbpassword>@ds241977.mlab.com:41977/heroku_jx795bwm';
 /** * mongoDb Url */
 mongoose.connect(DB_URL);
 
