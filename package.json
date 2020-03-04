@@ -15,7 +15,8 @@
     "clean": "rm dist/bundle.js",
     "build-dev": "webpack -d --mode development --watch",
     "build-prod": "webpack -p --mode production",
-    "start": "node serve"
+    "start": "node serve",
+    "start-dev": "nodemon seerve"
   },
   "dependencies": {
     "@material-ui/core": "^4.9.5",
