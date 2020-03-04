@@ -1,1 +1,1 @@
-web: nodemon serve
+web: node serve
