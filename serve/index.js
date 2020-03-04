@@ -14,7 +14,7 @@ const Mongo = require('../db/index');
 
 const animeController = require('../db/controllers/animeControllers');
 
-const port = 8081;
+const PORT = process.env.PORT || 8081;
 
 const originUrl = '*';
 
@@ -77,4 +77,4 @@ app.delete('/api/delete', (request, response) => {
   });
 });
 
-app.listen(port, () => console.log(`listening on port ${port}!`));
+app.listen(PORT, () => console.log(`listening on port ${PORT}!`));

@@ -1,22 +1,21 @@
 {
   "name": "My_Anime",
-  "jest": {
-    "verbose": true
-  },
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "keywords": [],
+  "keywords": [
+    "heroku"
+  ],
+  "engines": {
+    "node": "12.x"
+  },
   "author": "",
   "license": "ISC",
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "coverage": "jest --coverage",
     "clean": "rm dist/bundle.js",
     "build-dev": "webpack -d --mode development --watch",
     "build-prod": "webpack -p --mode production",
-    "start": "nodemon serve"
+    "start": "node serve"
   },
   "dependencies": {
     "@material-ui/core": "^4.9.5",
