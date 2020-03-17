@@ -42,16 +42,31 @@ app.get('/api/add', (request, response) => {
         title: result.data.title,
         title_english: result.data.title_english,
         title_japanese: result.data.title_japanese,
+        title_synonyms: result.data.title_synonyms,
         type: result.data.type,
+        source: result.data.source,
+        status: result.data.status,
         episodes: result.data.episodes,
         duration: result.data.duration,
         rating: result.data.rating,
+        airing: result.data.airing,
         score: result.data.score,
+        aired: result.data.aired,
         scored_by: result.data.scored_by,
         rank: result.data.rank,
         popularity: result.data.popularity,
         favorites: result.data.favorites,
-        synopsis: result.data.synopsis
+        synopsis: result.data.synopsis,
+        background: result.data.background,
+        premiered: result.data.premiered,
+        broadcast: result.data.broadcast,
+        related: result.data.related,
+        producers: result.data.producers,
+        licensors: result.data.licensors,
+        studios: result.data.studios,
+        genres: result.data.genres,
+        opening_themes: result.data.opening_themes,
+        ending_themes: result.data.ending_themes
       };
       animeController.addNewAnime(bundleFile, (err, results) => {
         if (err) {

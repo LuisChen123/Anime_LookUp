@@ -8,6 +8,10 @@ import SearchIcon from '@material-ui/icons/Search';
 import SendIcon from '@material-ui/icons/Send';
 import IconButton from '@material-ui/core/IconButton';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Button from '@material-ui/core/Button';
+import MenuIcon from '@material-ui/icons/Menu';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -68,6 +72,15 @@ const useStyles = makeStyles(theme => ({
 export default function SearchBar(props) {
   const classes = useStyles();
   const [inputValue, setInputValue] = useState('');
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <div className={classes.grow}>
       <AppBar position="static">
@@ -91,9 +104,28 @@ export default function SearchBar(props) {
               value={inputValue}
             />
           </div>
-          <IconButton aria-label="delete" onClick={() => props.handleButtonSend()}>
+          <IconButton aria-label="send" onClick={() => props.handleButtonSend()}>
             <SendIcon color="secondary" />
           </IconButton>
+          <IconButton
+            color="secondary"
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={handleClick}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <MenuItem onClick={handleClose}>My account</MenuItem>
+            <MenuItem onClick={handleClose}>Logout</MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
       <div className={classes.root}>

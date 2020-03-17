@@ -1,18 +1,31 @@
 import React from 'react';
 
-import { HashRouter, Route, Switch, BrowserRouter } from 'react-router-dom';
+import { HashRouter as Router, Route, BrowserRouter, Redirect } from 'react-router-dom';
 
-import App from './src/components/App';
+import CacheRoute, { CacheSwitch } from 'react-router-cache-route';
+
+import DashBoard from './src/components/App';
 
 import Detail from './src/components/childComponents/AnimeDetailPage';
 
+import NavBar from './src/components/NavBar';
+
+import Login from './src/components/logIn';
+
+import Register from './src/components/Register';
+
+const loggedIn = false;
+
 const BasicRoute = () => (
-  <HashRouter history={BrowserRouter}>
-    <Switch>
-      <Route exact path="/" component={App} />
-      <Route exact path="/detail/:id" component={Detail} />
-    </Switch>
-  </HashRouter>
+  <Router history={BrowserRouter}>
+    <CacheSwitch>
+      <CacheRoute exact path="/register" component={Register} />
+      {loggedIn ? <Redirect to="/" /> : <Login />}
+      <CacheRoute exact path="/" component={DashBoard} />
+      <Route exact path="/navBar" component={NavBar} />
+      <CacheRoute exact path="/detail/:id" component={Detail} />
+    </CacheSwitch>
+  </Router>
 );
 
 export default BasicRoute;

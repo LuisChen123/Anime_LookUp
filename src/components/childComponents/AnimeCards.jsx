@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
-import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -18,7 +17,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     maxWidth: 345,
     width: 345,
-    margin: theme.spacing(10, 0),
+    margin: theme.spacing(10, 1),
     position: 'relative'
   },
   media: {
@@ -140,7 +139,7 @@ export default function AnimeCards(props) {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions className={classes.autoCenter}>
+      {/* <CardActions className={classes.autoCenter}>
         <IconButton
           aria-label="add"
           disabled={confirm}
@@ -148,7 +147,7 @@ export default function AnimeCards(props) {
         >
           {fav ? <FavoriteBorderIcon /> : <FavoriteIcon />}
         </IconButton>
-      </CardActions>
+      </CardActions> */}
     </Card>
   );
 }

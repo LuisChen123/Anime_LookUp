@@ -4,7 +4,9 @@ import Axios from 'axios';
 
 import { makeStyles, Typography, Paper, Divider, Grid } from '@material-ui/core';
 
-import SearchBar from './searchBar';
+import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
+
+import SearchBar from './SearchBar';
 
 import AnimeCardsBox from './AnimeCardsBox';
 
@@ -35,6 +37,10 @@ export default function App(props) {
   const [returnedData, setReturnedData] = useState([]);
   const [cardNumbers, setCardNumbers] = useState(16);
   const [wait, setWait] = useState(false);
+
+  useEffect(() => {
+    console.log(props);
+  }, []);
 
   const getAnimatData = () => {
     Axios.get(`https://api.jikan.moe/v3/search/anime?q=${keyWord}&limit=${cardNumbers}`)
@@ -70,9 +76,9 @@ export default function App(props) {
 
   return (
     <div>
-      <Typography className={classes.Bolder} variant="h4" align="center" color="primary">
+      {/* <Typography className={classes.Bolder} variant="h4" align="center" color="primary">
         My Anime List
-      </Typography>
+      </Typography> */}
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <SearchBar
@@ -84,10 +90,12 @@ export default function App(props) {
         <Grid item xs={1} />
         <Grid item xs={10}>
           <Paper className={classes.paper}>
+            {/* show the anime list or show not happy icon */}
+
             {returnedData.length > 0 ? (
               <AnimeCardsBox animatData={returnedData} history={props.history} />
             ) : (
-              'nodata'
+              <SentimentVeryDissatisfiedIcon />
             )}
           </Paper>
         </Grid>
