@@ -91,7 +91,6 @@ export default function App(props) {
         <Grid item xs={10}>
           <Paper className={classes.paper}>
             {/* show the anime list or show not happy icon */}
-
             {returnedData.length > 0 ? (
               <AnimeCardsBox animatData={returnedData} history={props.history} />
             ) : (

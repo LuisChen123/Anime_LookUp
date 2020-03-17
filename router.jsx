@@ -14,13 +14,11 @@ import Login from './src/components/logIn';
 
 import Register from './src/components/Register';
 
-const loggedIn = false;
+const loggedIn = true;
 
 const BasicRoute = () => (
   <Router history={BrowserRouter}>
     <CacheSwitch>
-      <CacheRoute exact path="/register" component={Register} />
-      {loggedIn ? <Redirect to="/" /> : <Login />}
       <CacheRoute exact path="/" component={DashBoard} />
       <Route exact path="/navBar" component={NavBar} />
       <CacheRoute exact path="/detail/:id" component={Detail} />
