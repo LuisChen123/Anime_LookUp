@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 // eslint-disable-next-line import/extensions
-import App from './components/App';
+import Router from '../router.jsx';
 
 // eslint-disable-next-line no-undef
 const mountNode = document.getElementById('jikan');
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(<Router />, mountNode);

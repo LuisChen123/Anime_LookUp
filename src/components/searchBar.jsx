@@ -80,15 +80,15 @@ export default function SearchBar(props) {
               <SearchIcon />
             </div>
             <InputBase
-              placeholder="Entry your text here"
+              placeholder="type something to start search"
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput
               }}
               inputProps={{ 'aria-label': 'search' }}
-              onKeyDown={() => props.handleSearch(inputValue)}
-              value={inputValue}
               onChange={e => setInputValue(e.target.value)}
+              onKeyUp={() => props.handleSearch(inputValue)}
+              value={inputValue}
             />
           </div>
           <IconButton aria-label="delete" onClick={() => props.handleButtonSend()}>

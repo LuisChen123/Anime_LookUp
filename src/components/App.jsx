@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function App() {
+export default function App(props) {
   const classes = useStyles();
   const [keyWord, setKeyWord] = useState('');
   const [returnedData, setReturnedData] = useState([]);
@@ -48,19 +48,20 @@ export default function App() {
       });
   };
 
-  const handleButtonSend = () => {
-    if (window.event.keyCode === 13 && keyWord.length < 3) {
-      window.alert('must longer then 3 char');
+  const handleButtonSend = inputValue => {
+    setKeyWord(inputValue);
+    if (keyWord.length < 3) {
+      window.alert('key word must longer then 2 char');
     } else {
       setWait(true);
       getAnimatData();
     }
   };
 
-  const handleKeyDown = inputValue => {
+  const handleKeyUp = inputValue => {
     setKeyWord(inputValue);
-    if (window.event.keyCode === 13 && keyWord.length === 0) {
-      window.alert('must longer then 2 char');
+    if (window.event.keyCode === 13 && keyWord.length < 3) {
+      window.alert('key word must longer then 2 char');
     } else if (window.event.keyCode === 13 && keyWord.length > 0) {
       setWait(true);
       getAnimatData();
@@ -75,7 +76,7 @@ export default function App() {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <SearchBar
-            handleSearch={handleKeyDown}
+            handleSearch={handleKeyUp}
             handleButtonSend={handleButtonSend}
             waitReturn={wait}
           />
@@ -83,7 +84,11 @@ export default function App() {
         <Grid item xs={1} />
         <Grid item xs={10}>
           <Paper className={classes.paper}>
-            {returnedData.length > 0 ? <AnimeCardsBox animatData={returnedData} /> : 'nodata'}
+            {returnedData.length > 0 ? (
+              <AnimeCardsBox animatData={returnedData} history={props.history} />
+            ) : (
+              'nodata'
+            )}
           </Paper>
         </Grid>
         <Grid item xs={1} />

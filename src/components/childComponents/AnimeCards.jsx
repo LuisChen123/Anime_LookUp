@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -92,6 +93,16 @@ export default function AnimeCards(props) {
     }
   };
 
+  const handleJump = data => {
+    console.log(data);
+    props.history.push({
+      pathname: `/detail/${props.animatData.mal_id}`,
+      state: {
+        bundle: props.animatData
+      }
+    });
+  };
+
   return (
     <Card className={classes.root}>
       <div>
@@ -103,11 +114,12 @@ export default function AnimeCards(props) {
           onClose={handleClose}
         >
           <Alert onClose={handleClose} severity="success">
+            {/* window that tell user result */}
             {message}
           </Alert>
         </Snackbar>
       </div>
-      <CardActionArea>
+      <CardActionArea onClick={() => handleJump(props.animatData)}>
         <CardMedia
           component="img"
           className={classes.media}

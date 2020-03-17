@@ -29,10 +29,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/', express.static(path.join(__dirname, '../dist')));
 
 app.get('/api/add', (request, response) => {
-  let id = request.query.id;
+  const { id } = request.query;
 
   Axios.get(`${API}${id}`)
     .then(function(result) {
+      console.log(result);
       const bundleFile = {
         mal_id: result.data.mal_id,
         url: result.data.url,
@@ -62,13 +63,14 @@ app.get('/api/add', (request, response) => {
       });
     })
     .catch(function(error) {
-      response.send(error + 'catchErr');
+      response.send(`${error} catchErr`);
     });
 });
 
 app.delete('/api/delete', (request, response) => {
-  let id = request.query.id;
+  const { id } = request.query;
   animeController.removeFavAnime(id, (err, result) => {
+    console.log(result);
     if (err) {
       response.send(err.errmsg);
     } else {

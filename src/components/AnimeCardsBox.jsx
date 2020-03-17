@@ -18,7 +18,7 @@ export default function AnimeCardsBox(props) {
   return (
     <div className={classes.boxLayout}>
       {props.animatData.map(item => {
-        return <AnimeCards animatData={item} key={item.mal_id} />;
+        return <AnimeCards animatData={item} key={item.mal_id} history={props.history} />;
       })}
     </div>
   );

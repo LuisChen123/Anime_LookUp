@@ -16,7 +16,7 @@
     "build-dev": "webpack -d --mode development --watch",
     "build-prod": "webpack -p --mode production",
     "start": "node serve",
-    "start-dev": "nodemon seerve"
+    "start-dev": "nodemon serve"
   },
   "dependencies": {
     "@material-ui/core": "^4.9.5",
@@ -30,6 +30,7 @@
     "prettier": "^1.19.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-router-dom": "^5.1.2",
     "react-transition-group": "^4.3.0",
     "request": "^2.88.0"
   },
