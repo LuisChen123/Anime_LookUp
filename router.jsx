@@ -19,6 +19,7 @@ const loggedIn = true;
 const BasicRoute = () => (
   <Router history={BrowserRouter}>
     <CacheSwitch>
+      <CacheRoute exact path="/login" component={Login} />
       <CacheRoute exact path="/" component={DashBoard} />
       <Route exact path="/navBar" component={NavBar} />
       <CacheRoute exact path="/detail/:id" component={Detail} />
