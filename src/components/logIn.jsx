@@ -4,6 +4,10 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,11 +26,51 @@ const useStyles = makeStyles(theme => ({
 
 export default function Login() {
   const classes = useStyles();
-  const [userName, setUserName] = useState('');
-  const [passWord, setPassWord] = useState('');
-  const [comfirmPassword, setComfirmPassworld] = useState('');
-  const [isUserNameCorrect, setisUserNameCorrect] = useState(false);
-  const [isPasswordError, setIsPassWordError] = useState(false);
+
+  const [value, setValue] = useState({
+    userName: '',
+    passWord: '',
+    comfirmPassword: '',
+    showPassWord: false,
+    isUserNameError: false,
+    showComfirmPassWord: false,
+    isUserNameCorrect: false,
+    isPasswordCorrect: false,
+    userNameErrorMessage: '',
+    passwordErrorMessage: ''
+  });
+
+  const handleChange = type => event => {
+    setValue({ ...value, [type]: event.target.value });
+  };
+
+  const handleClickShowPasword = () => {
+    setValue({ ...value, showPassWord: !value.showPassWord });
+  };
+
+  const handleClickShowComfirmPasword = () => {
+    setValue({ ...value, showComfirmPassWord: !value.showComfirmPassWord });
+  };
+
+  const handleMouseDownPassword = event => {
+    event.preventDefault();
+  };
+
+  const handleUserNameRule = () => {
+    if (value.userName.trim().length < 6) {
+      setValue({
+        ...value,
+        userNameErrorMessage: 'user name must longer then 6 characters',
+        isUserNameError: true
+      });
+    } else if (value.userName.trim().length > 6 || value.userName.trim.length === 6) {
+      setValue({
+        ...value,
+        userNameErrorMessage: '',
+        isUserNameError: false
+      });
+    }
+  };
 
   return (
     <div className={classes.root}>
@@ -42,31 +86,63 @@ export default function Login() {
                 <TextField
                   required
                   fullWidth
+                  error={value.isUserNameErro}
                   id="filled-required"
                   label="User Name"
                   variant="filled"
                   color="primary"
+                  value={value.userName.trim()}
+                  onChange={handleChange('userName')}
+                  helperText={value.isUserNameCorrect ? null : value.userNameErrorMessage}
+                  onKeyDown={handleUserNameRule}
                 />
                 <TextField
                   required
                   fullWidth
-                  error={isPasswordError}
+                  error={value.isPasswordCorrect}
                   id="filled-password-input"
                   label="Password"
-                  type="password"
+                  type={value.showPassWord ? 'text' : 'password'}
                   autoComplete="current-password"
                   variant="filled"
-                  helperText=""
+                  helperText={value.isPasswordMeetReq ? null : value.passwordErrorMessage}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPasword}
+                          onMouseDown={handleMouseDownPassword}
+                        >
+                          {value.showPassWord ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
                 />
                 <TextField
                   required
                   fullWidth
-                  error={isPasswordError}
+                  error={value.isPasswordCorrect}
                   id="filled-password-input"
                   label="Comfirm-Password"
-                  type="password"
+                  type={value.showComfirmPassWord ? 'text' : 'password'}
                   autoComplete="current-password"
                   variant="filled"
+                  helperText={value.isPasswordMeetReq ? null : value.passwordErrorMessage}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowComfirmPasword}
+                          onMouseDown={handleMouseDownPassword}
+                        >
+                          {value.showComfirmPassWord ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
                 />
                 <TextField
                   required
