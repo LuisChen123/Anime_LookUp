@@ -13,7 +13,15 @@ import Button from '@material-ui/core/Button';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
+// alert component
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+// css style
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
@@ -46,51 +54,66 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Register() {
+export default function Login() {
   const classes = useStyles();
 
+  // state
   const [value, setValue] = useState({
     userName: '',
     passWord: '',
-    comfirmPassword: '',
-    age: '',
     showPassWord: false,
-    showComfirmPassWord: false,
     isUserNameCorrect: false,
     isPasswordCorrect: false,
-    isAgeCorrect: false,
     userNameErrorMessage: '',
     passwordErrorMessage: '',
-    ageErrorMessage: '',
     patt: new RegExp(
       '^.*(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!.?|~])[a-zA-Z0-9@#$%^&+=!.?|~]*$'
     )
   });
 
+  // snackbar state/postion control
+  const [state, setState] = React.useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'center'
+  });
+
+  const { vertical, horizontal, open } = state;
+
+  // handle alert popup
+  const handleClick = () => {
+    setState({ open: true, vertical: 'top', horizontal: 'center' });
+  };
+  // handle alert close
+  const handleClose = () => {
+    setState({ ...state, open: false });
+  };
+
+  // handle user name/password
   const handleChange = type => event => {
     setValue({ ...value, [type]: event.target.value });
   };
 
+  // handle show or hide password
   const handleClickShowPasword = () => {
     setValue({ ...value, showPassWord: !value.showPassWord });
   };
 
-  const handleClickShowComfirmPasword = () => {
-    setValue({ ...value, showComfirmPassWord: !value.showComfirmPassWord });
-  };
+  // handle show or hide ComfirmPasword
 
+  // disable default
   const handleMouseDownPassword = event => {
     event.preventDefault();
   };
-
+  // handle username rull
   const handleUserNameRule = () => {
-    if (value.userName.trim().length < 6) {
+    if (value.userName.length < 6) {
       setValue({
         ...value,
-        userNameErrorMessage: 'user name must longer then 6 characters',
+        userNameErrorMessage: 'must longer then 6 characters',
         isUserNameCorrect: true
       });
-    } else if (value.userName.trim().length > 6 || value.userName.trim.length === 6) {
+    } else if (value.userName.length > 6 || value.userName.length === 6) {
       setValue({
         ...value,
         userNameErrorMessage: '',
@@ -99,8 +122,9 @@ export default function Register() {
     }
   };
 
+  // handle password rull
   const hanldPasswordRule = () => {
-    if (value.passWord.trim() !== value.comfirmPassword.trim()) {
+    if (value.passWord !== value.comfirmPassword) {
       setValue({
         ...value,
         isPasswordCorrect: true,
@@ -116,7 +140,7 @@ export default function Register() {
         passwordErrorMessage:
           'PassWord must contain at least 8 chararters, and include at least one capital letter,one low case letter,one number and one special character'
       });
-    } else if (value.passWord.trim() === value.comfirmPassword.trim()) {
+    } else if (value.passWord === value.comfirmPassword) {
       setValue({
         ...value,
         isPasswordCorrect: false,
@@ -125,36 +149,33 @@ export default function Register() {
     }
   };
 
-  const handleAgeRule = () => {
-    if (value.age < 18) {
-      setValue({
-        ...value,
-        isAgeCorrect: true,
-        ageErrorMessage: 'Sorry, You must older than 18 years old to view this website.'
-      });
-    } else if (value.age > 99) {
-      setValue({
-        ...value,
-        isAgeCorrect: true,
-        ageErrorMessage: 'Sorry, You must younger than 100 years old to view this website.'
-      });
-    } else {
-      setValue({
-        ...value,
-        isAgeCorrect: false,
-        ageErrorMessage: ''
-      });
+  const handleSubmit = event => {
+    event.preventDefault();
+    if (value.isPasswordCorrect === false && value.isUserNameCorrect === false) {
+      // doing ajax here
+      console.log('123');
     }
+    // when user`s infromation is not meet the requestment
+    handleClick();
   };
 
   return (
     <div className={classes.root}>
       <Grid container direction="column" justify="center" alignItems="center" spacing={3}>
         <Grid item xs={1} sm={3} />
+        <Snackbar
+          anchorOrigin={{ vertical, horizontal }}
+          key={`${vertical},${horizontal}`}
+          open={open}
+          autoHideDuration={3000}
+          onClose={handleClose}
+        >
+          <Alert severity="error">Your username/password is not correct</Alert>
+        </Snackbar>
         <Grid item xs={10} sm={6}>
           <Paper className={classes.paper}>
             <Typography variant="h4" component="h4" align="center">
-              Register
+              Login
             </Typography>
             <form className={classes.root} autoComplete="off">
               <div>
@@ -170,6 +191,9 @@ export default function Register() {
                   error={value.isUserNameCorrect}
                   helperText={value.isUserNameCorrect ? value.userNameErrorMessage : null}
                   onKeyUp={handleUserNameRule}
+                  InputLabelProps={{
+                    shrink: true
+                  }}
                 />
                 <TextField
                   required
@@ -183,6 +207,7 @@ export default function Register() {
                   helperText={value.isPasswordCorrect ? value.passwordErrorMessage : null}
                   onChange={handleChange('passWord')}
                   onKeyUp={hanldPasswordRule}
+                  shrink="true"
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
@@ -197,55 +222,14 @@ export default function Register() {
                     )
                   }}
                 />
-                <TextField
-                  required
-                  fullWidth
-                  error={value.isPasswordCorrect}
-                  id="filled-password-input"
-                  label="Comfirm-Password"
-                  type={value.showComfirmPassWord ? 'text' : 'password'}
-                  autoComplete="current-password"
-                  variant="filled"
-                  helperText={value.isPasswordCorrect ? value.passwordErrorMessage : null}
-                  onChange={handleChange('comfirmPassword')}
-                  onKeyUp={hanldPasswordRule}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowComfirmPasword}
-                          onMouseDown={handleMouseDownPassword}
-                        >
-                          {value.showComfirmPassWord ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    )
-                  }}
-                />
-                <TextField
-                  required
-                  fullWidth
-                  id="filled-number"
-                  label="Age"
-                  type="number"
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                  variant="filled"
-                  error={value.isAgeCorrect}
-                  onChange={handleChange('age')}
-                  onKeyUp={handleAgeRule}
-                  helperText={value.ageErrorMessage}
-                />
               </div>
             </form>
             <div className={classes.Lines}>
-              <Link to="/login" className={classes.LinkStyle}>
-                Log in
+              <Link to="/register" className={classes.LinkStyle}>
+                Register
               </Link>
-              <Button variant="contained" color="primary">
-                Submit
+              <Button variant="contained" color="primary" onClick={handleSubmit}>
+                Login
               </Button>
             </div>
             <div className={classes.breakLine} />

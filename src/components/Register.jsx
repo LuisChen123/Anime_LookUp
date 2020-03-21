@@ -14,10 +14,14 @@ import GitHubIcon from '@material-ui/icons/GitHub';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import Snackbar from '@material-ui/core/Snackbar';
-import Fade from '@material-ui/core/Fade';
-import Slide from '@material-ui/core/Slide';
-import Grow from '@material-ui/core/Grow';
+import MuiAlert from '@material-ui/lab/Alert';
 
+// alert component
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+// css style
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
@@ -53,6 +57,7 @@ const useStyles = makeStyles(theme => ({
 export default function Register() {
   const classes = useStyles();
 
+  // state
   const [value, setValue] = useState({
     userName: '',
     passWord: '',
@@ -71,30 +76,52 @@ export default function Register() {
     )
   });
 
+  // snackbar state/postion control
+  const [state, setState] = React.useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'center'
+  });
+
+  const { vertical, horizontal, open } = state;
+
+  // handle alert popup
+  const handleClick = () => {
+    setState({ open: true, vertical: 'top', horizontal: 'center' });
+  };
+  // handle alert close
+  const handleClose = () => {
+    setState({ ...state, open: false });
+  };
+
+  // handle user name/password/age state
   const handleChange = type => event => {
     setValue({ ...value, [type]: event.target.value });
   };
 
+  // handle show or hide password
   const handleClickShowPasword = () => {
     setValue({ ...value, showPassWord: !value.showPassWord });
   };
 
+  // handle show or hide ComfirmPasword
   const handleClickShowComfirmPasword = () => {
     setValue({ ...value, showComfirmPassWord: !value.showComfirmPassWord });
   };
 
+  // disable default
   const handleMouseDownPassword = event => {
     event.preventDefault();
   };
-
+  // handle username rull
   const handleUserNameRule = () => {
-    if (value.userName.trim().length < 6) {
+    if (value.userName.length < 6) {
       setValue({
         ...value,
         userNameErrorMessage: 'user name must longer then 6 characters',
         isUserNameCorrect: true
       });
-    } else if (value.userName.trim().length > 6 || value.userName.trim.length === 6) {
+    } else if (value.userName.length > 6 || value.userName.length === 6) {
       setValue({
         ...value,
         userNameErrorMessage: '',
@@ -103,8 +130,9 @@ export default function Register() {
     }
   };
 
+  // handle password rull
   const hanldPasswordRule = () => {
-    if (value.passWord.trim() !== value.comfirmPassword.trim()) {
+    if (value.passWord !== value.comfirmPassword) {
       setValue({
         ...value,
         isPasswordCorrect: true,
@@ -120,7 +148,7 @@ export default function Register() {
         passwordErrorMessage:
           'PassWord must contain at least 8 chararters, and include at least one capital letter,one low case letter,one number and one special character'
       });
-    } else if (value.passWord.trim() === value.comfirmPassword.trim()) {
+    } else if (value.passWord === value.comfirmPassword) {
       setValue({
         ...value,
         isPasswordCorrect: false,
@@ -128,7 +156,7 @@ export default function Register() {
       });
     }
   };
-
+  // handle age rull
   const handleAgeRule = () => {
     if (value.age < 18) {
       setValue({
@@ -159,15 +187,25 @@ export default function Register() {
       value.isUserNameCorrect === false
     ) {
       // doing ajax here
-    } else {
-      // alert something
+      console.log('123');
     }
+    // when user`s infromation is not meet the requestment
+    handleClick();
   };
 
   return (
     <div className={classes.root}>
       <Grid container direction="column" justify="center" alignItems="center" spacing={3}>
         <Grid item xs={1} sm={3} />
+        <Snackbar
+          anchorOrigin={{ vertical, horizontal }}
+          key={`${vertical},${horizontal}`}
+          open={open}
+          autoHideDuration={3000}
+          onClose={handleClose}
+        >
+          <Alert severity="error">please fill out request area!</Alert>
+        </Snackbar>
         <Grid item xs={10} sm={6}>
           <Paper className={classes.paper}>
             <Typography variant="h4" component="h4" align="center">
@@ -262,7 +300,7 @@ export default function Register() {
                 Log in
               </Link>
               <Button variant="contained" color="primary" onClick={handleSubmit}>
-                Submit
+                Register
               </Button>
             </div>
             <div className={classes.breakLine} />
