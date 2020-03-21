@@ -10,7 +10,7 @@ import Detail from './src/components/childComponents/AnimeDetailPage';
 
 import NavBar from './src/components/NavBar';
 
-import Login from './src/components/logIn';
+import Login from './src/components/Login';
 
 import Register from './src/components/Register';
 
@@ -19,6 +19,7 @@ const loggedIn = true;
 const BasicRoute = () => (
   <Router history={BrowserRouter}>
     <CacheSwitch>
+      <CacheRoute exact path="/register" component={Register} />
       <CacheRoute exact path="/login" component={Login} />
       <CacheRoute exact path="/" component={DashBoard} />
       <Route exact path="/navBar" component={NavBar} />
