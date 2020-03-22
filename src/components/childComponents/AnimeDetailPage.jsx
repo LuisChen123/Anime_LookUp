@@ -22,7 +22,8 @@ const useStyles = makeStyles(theme => ({
     paddingTop: 0,
     paddingBottom: 0,
     paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(1)
+    paddingRight: theme.spacing(1),
+    width: '30%'
   },
   line: {
     display: 'flex',
@@ -30,15 +31,22 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1),
     padding: theme.spacing(1),
     color: 'black',
-    alignItems: 'baseline'
+    alignItems: 'baseline',
+    '&:nth-child(odd)': {
+      background: '#ececec'
+    }
   },
   lineItems: {
     paddingTop: 0,
     paddingBottom: 0,
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1),
-    textAlign: 'start'
-  }
+    textAlign: 'start',
+    width: '70%'
+  },
+  mediaBox: {},
+  picBox: {},
+  videBox: {}
 }));
 
 export default function AnimeDetailPage(props) {
@@ -91,6 +99,10 @@ export default function AnimeDetailPage(props) {
         <Grid item xs={1} sm={1} />
         <Grid item xs={10} sm={10}>
           <Paper className={classes.paper}>
+            <div className={classes.mediaBox}>
+              <div className={classes.picBox}>this is pic box</div>
+              <div className={classes.videBox}>this is video box</div>
+            </div>
             <ul className={classes.informationBox}>
               <li className={classes.line}>
                 <span className={classes.lineTitleStyle}>Title:</span>
