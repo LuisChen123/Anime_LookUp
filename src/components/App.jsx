@@ -76,9 +76,6 @@ export default function App(props) {
 
   return (
     <div>
-      {/* <Typography className={classes.Bolder} variant="h4" align="center" color="primary">
-        My Anime List
-      </Typography> */}
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <SearchBar

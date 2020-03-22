@@ -6,10 +6,6 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import CardActions from '@material-ui/core/CardActions';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 
@@ -95,10 +91,7 @@ export default function AnimeCards(props) {
   const handleJump = data => {
     console.log(data);
     props.history.push({
-      pathname: `/detail/${props.animatData.mal_id}`,
-      state: {
-        bundle: props.animatData
-      }
+      pathname: `/detail/${props.animatData.mal_id}`
     });
   };
 
@@ -139,15 +132,6 @@ export default function AnimeCards(props) {
           </Typography>
         </CardContent>
       </CardActionArea>
-      {/* <CardActions className={classes.autoCenter}>
-        <IconButton
-          aria-label="add"
-          disabled={confirm}
-          onClick={() => handleFav(props.animatData.mal_id)}
-        >
-          {fav ? <FavoriteBorderIcon /> : <FavoriteIcon />}
-        </IconButton>
-      </CardActions> */}
     </Card>
   );
 }
