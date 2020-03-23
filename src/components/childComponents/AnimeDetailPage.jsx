@@ -3,6 +3,8 @@ import Axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
+import CardMedia from '@material-ui/core/CardMedia';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -14,7 +16,8 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.secondary
   },
   informationBox: {
-    listStyle: 'none'
+    listStyle: 'none',
+    paddingInlineStart: 0
   },
   lineTitleStyle: {
     fontWeight: 'bold',
@@ -44,6 +47,15 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'start',
     width: '70%'
   },
+  imgs: {
+    border: '1px solid #ddd',
+    borderRadius: theme.spacing(1),
+    padding: theme.spacing(1),
+    width: theme.spacing(20),
+    '&:imgs:hover': {
+      boxShadow: '0 0 2px 1px rgba(0, 140, 186, 0.5)'
+    }
+  },
   mediaBox: {},
   picBox: {},
   videBox: {}
@@ -55,7 +67,8 @@ export default function AnimeDetailPage(props) {
     API: 'https://api.jikan.moe/v3/anime/',
     AnimeId: '',
     Bundle: {},
-    aired: {}
+    aired: {},
+    autoplay: '&autoplay=0'
   });
 
   useEffect(() => {
@@ -91,7 +104,9 @@ export default function AnimeDetailPage(props) {
     synopsis,
     background,
     premiered,
-    broadcast
+    broadcast,
+    image_url,
+    trailer_url
   } = value.Bundle;
   return (
     <div className={classes.root}>
@@ -99,10 +114,18 @@ export default function AnimeDetailPage(props) {
         <Grid item xs={1} sm={1} />
         <Grid item xs={10} sm={10}>
           <Paper className={classes.paper}>
-            <div className={classes.mediaBox}>
-              <div className={classes.picBox}>this is pic box</div>
-              <div className={classes.videBox}>this is video box</div>
+            <div className={classes.picBox}>
+              <img className={classes.imgs} src={image_url} alt="pic" />
             </div>
+            <div className={classes.videBox}>
+              <iframe
+                src={trailer_url + '/' + value.autoplay}
+                allowFullScreen={true}
+                title="trailer"
+                frameBorder="0"
+              />
+            </div>
+
             <ul className={classes.informationBox}>
               <li className={classes.line}>
                 <span className={classes.lineTitleStyle}>Title:</span>
@@ -149,7 +172,7 @@ export default function AnimeDetailPage(props) {
                 <span className={classes.lineItems}>{score}</span>
               </li>
               <li className={classes.line}>
-                <span className={classes.lineTitleStyle}>scored_by:</span>
+                <span className={classes.lineTitleStyle}>scored by:</span>
                 <span className={classes.lineItems}>{scored_by}</span>
               </li>
               <li className={classes.line}>
