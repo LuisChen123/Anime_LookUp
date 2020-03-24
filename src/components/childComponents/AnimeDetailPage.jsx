@@ -51,13 +51,16 @@ const useStyles = makeStyles(theme => ({
     border: '1px solid #ddd',
     borderRadius: theme.spacing(1),
     padding: theme.spacing(1),
-    width: theme.spacing(20),
-    '&:imgs:hover': {
+    width: theme.spacing(20)
+  },
+  mediaBox: {},
+  picBox: {
+    borderBottom: '1px black solid',
+    padding: '10px 0',
+    '&imgs:hover': {
       boxShadow: '0 0 2px 1px rgba(0, 140, 186, 0.5)'
     }
   },
-  mediaBox: {},
-  picBox: {},
   videBox: {}
 }));
 
