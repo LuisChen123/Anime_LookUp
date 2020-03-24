@@ -3,8 +3,7 @@ import Axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardMedia from '@material-ui/core/CardMedia';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -51,17 +50,28 @@ const useStyles = makeStyles(theme => ({
     border: '1px solid #ddd',
     borderRadius: theme.spacing(1),
     padding: theme.spacing(1),
-    width: theme.spacing(20)
-  },
-  mediaBox: {},
-  picBox: {
-    borderBottom: '1px black solid',
-    padding: '10px 0',
-    '&imgs:hover': {
+    width: theme.spacing(20),
+    '&:hover': {
       boxShadow: '0 0 2px 1px rgba(0, 140, 186, 0.5)'
     }
   },
-  videBox: {}
+  mediaBox: {},
+  picBox: {
+    borderBottom: '1px solid #ddd',
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    paddingLeft: 0,
+    paddingRight: 0
+  },
+  videBox: {
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    paddingLeft: 0,
+    paddingRight: 0
+  },
+  iframe: {
+    width: theme.spacing(30)
+  }
 }));
 
 export default function AnimeDetailPage(props) {
@@ -109,19 +119,25 @@ export default function AnimeDetailPage(props) {
     premiered,
     broadcast,
     image_url,
-    trailer_url
+    trailer_url,
+    url
   } = value.Bundle;
+
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
         <Grid item xs={1} sm={1} />
         <Grid item xs={10} sm={10}>
+          <div className="navBar"></div>
           <Paper className={classes.paper}>
             <div className={classes.picBox}>
-              <img className={classes.imgs} src={image_url} alt="pic" />
+              <a href={url} target="_blank">
+                <img src={image_url} alt="animePic" className={classes.imgs} />
+              </a>
             </div>
             <div className={classes.videBox}>
               <iframe
+                className={classes.iframe}
                 src={trailer_url + '/' + value.autoplay}
                 allowFullScreen={true}
                 title="trailer"
