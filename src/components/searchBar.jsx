@@ -71,16 +71,32 @@ const useStyles = makeStyles(theme => ({
 
 export default function SearchBar(props) {
   const classes = useStyles();
-  const [inputValue, setInputValue] = useState('');
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  // const [inputValue, setInputValue] = useState('');
+  // const [anchorEl, setAnchorEl] = React.useState(null);
+  const [value, setValue] = useState({
+    inputValue: '',
+    anchorEl: null,
+    userName: 'Luis'
+  });
 
   const handleClick = event => {
-    setAnchorEl(event.currentTarget);
+    setValue({
+      ...value,
+      anchorEl: event.currentTarget
+    });
   };
 
   const handleClose = () => {
-    setAnchorEl(null);
+    // setAnchorEl(null);
+    setValue({
+      ...value,
+      anchorEl: null
+    });
   };
+
+  // const isLogin = () => {
+  //   if(logInState)
+  // };
   return (
     <div className={classes.grow}>
       <AppBar position="static">
@@ -99,9 +115,9 @@ export default function SearchBar(props) {
                 input: classes.inputInput
               }}
               inputProps={{ 'aria-label': 'search' }}
-              onChange={e => setInputValue(e.target.value)}
-              onKeyUp={() => props.handleSearch(inputValue)}
-              value={inputValue}
+              onChange={e => setValue({ inputValue: e.target.value })}
+              onKeyUp={() => props.handleSearch(value.inputValue)}
+              value={value.inputValue}
             />
           </div>
           <IconButton aria-label="send" onClick={() => props.handleButtonSend()}>
@@ -117,12 +133,12 @@ export default function SearchBar(props) {
           </IconButton>
           <Menu
             id="simple-menu"
-            anchorEl={anchorEl}
+            anchorEl={value.anchorEl}
             keepMounted
-            open={Boolean(anchorEl)}
+            open={Boolean(value.anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <MenuItem onClick={handleClose}>{value.userName}</MenuItem>
             <MenuItem onClick={handleClose}>My account</MenuItem>
             <MenuItem onClick={handleClose}>Logout</MenuItem>
           </Menu>

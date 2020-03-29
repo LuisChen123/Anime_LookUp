@@ -28,6 +28,22 @@ app.use(bodyParser.json()); // conveart to json file
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/', express.static(path.join(__dirname, '../dist')));
 
+app.post('/register', (request, response) => {
+  const { userName, passWord, age } = request.body;
+  const Name = userName;
+  const Pass = passWord;
+  const Age = age;
+
+  animeController.addNewUser(Name, Pass, Age, (err, result) => {
+    if (err) {
+      response.send(err);
+    } else {
+      console.log(result);
+      response.send(result);
+    }
+  });
+});
+
 app.get('/api/add', (request, response) => {
   const { id } = request.query;
 

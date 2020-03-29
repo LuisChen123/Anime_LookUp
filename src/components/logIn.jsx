@@ -62,10 +62,9 @@ export default function Login() {
     userName: '',
     passWord: '',
     showPassWord: false,
-    isUserNameCorrect: false,
-    isPasswordCorrect: false,
-    userNameErrorMessage: '',
-    passwordErrorMessage: '',
+    error: false,
+    userNameOrPassWordErrorMessage: '',
+    userNameEmptyErrorMessage: '',
     patt: new RegExp(
       '^.*(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!.?|~])[a-zA-Z0-9@#$%^&+=!.?|~]*$'
     )
@@ -105,58 +104,22 @@ export default function Login() {
   const handleMouseDownPassword = event => {
     event.preventDefault();
   };
-  // handle username rull
-  const handleUserNameRule = () => {
-    if (value.userName.length < 6) {
-      setValue({
-        ...value,
-        userNameErrorMessage: 'must longer then 6 characters',
-        isUserNameCorrect: true
-      });
-    } else if (value.userName.length > 6 || value.userName.length === 6) {
-      setValue({
-        ...value,
-        userNameErrorMessage: '',
-        isUserNameCorrect: false
-      });
-    }
-  };
 
-  // handle password rull
-  const hanldPasswordRule = () => {
-    if (value.passWord !== value.comfirmPassword) {
+  const handleSubmit = () => {
+    if (value.userName.trim() === '' || value.passWord.trim() === '') {
       setValue({
         ...value,
-        isPasswordCorrect: true,
-        passwordErrorMessage: 'you must enter same passwords!'
+        error: true,
+        userNamePasswodEmptyMessage: 'can`t be empty!'
       });
-    } else if (
-      value.patt.test(value.passWord) === false ||
-      value.patt.test(value.comfirmPassword) === false
-    ) {
+    } else if (value.userName.trim() !== '' && value.passWord.trim() !== '') {
       setValue({
         ...value,
-        isPasswordCorrect: true,
-        passwordErrorMessage:
-          'PassWord must contain at least 8 chararters, and include at least one capital letter,one low case letter,one number and one special character'
+        error: false
       });
-    } else if (value.passWord === value.comfirmPassword) {
-      setValue({
-        ...value,
-        isPasswordCorrect: false,
-        passwordErrorMessage: ''
-      });
-    }
-  };
 
-  const handleSubmit = event => {
-    event.preventDefault();
-    if (value.isPasswordCorrect === false && value.isUserNameCorrect === false) {
-      // doing ajax here
-      console.log('123');
+      // ajax
     }
-    // when user`s infromation is not meet the requestment
-    handleClick();
   };
 
   return (
@@ -170,7 +133,7 @@ export default function Login() {
           autoHideDuration={3000}
           onClose={handleClose}
         >
-          <Alert severity="error">Your username/password is not correct</Alert>
+          <Alert severity="error">{value.userNameOrPassWordErrorMessage}</Alert>
         </Snackbar>
         <Grid item xs={10} sm={6}>
           <Paper className={classes.paper}>
@@ -186,14 +149,11 @@ export default function Login() {
                   label="User Name"
                   variant="filled"
                   color="primary"
-                  value={value.userName.trim()}
+                  autoComplete="current-username"
                   onChange={handleChange('userName')}
-                  error={value.isUserNameCorrect}
-                  helperText={value.isUserNameCorrect ? value.userNameErrorMessage : null}
-                  onKeyUp={handleUserNameRule}
-                  InputLabelProps={{
-                    shrink: true
-                  }}
+                  error={value.error}
+                  helperText={value.error ? value.userNamePasswodEmptyMessage : null}
+                  shrink="true"
                 />
                 <TextField
                   required
@@ -203,10 +163,9 @@ export default function Login() {
                   type={value.showPassWord ? 'text' : 'password'}
                   autoComplete="current-password"
                   variant="filled"
-                  error={value.isPasswordCorrect}
-                  helperText={value.isPasswordCorrect ? value.passwordErrorMessage : null}
+                  error={value.error}
+                  helperText={value.error ? value.userNamePasswodEmptyMessage : null}
                   onChange={handleChange('passWord')}
-                  onKeyUp={hanldPasswordRule}
                   shrink="true"
                   InputProps={{
                     endAdornment: (

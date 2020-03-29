@@ -1,6 +1,13 @@
 const mongoose = require('mongoose');
 
+const userInfoSchema = mongoose.Schema({
+  userName: String,
+  passWord: String,
+  age: Number
+});
+
 const animeSchema = mongoose.Schema({
+  userName: String,
   mal_id: { type: String, unique: true },
   url: String,
   image_url: String,
@@ -10,16 +17,33 @@ const animeSchema = mongoose.Schema({
   title_japanese: String,
   type: String,
   episodes: Number,
+  status: String,
   duration: String,
   rating: String,
+  airing: Object,
   score: Number,
+  aired: Object,
   scored_by: Number,
   rank: Number,
   popularity: Number,
   favorites: Number,
-  synopsis: String
+  synopsis: String,
+  background: String,
+  premiered: String,
+  broadcast: String,
+  related: Object,
+  producers: Array,
+  licensors: Array,
+  studios: Array,
+  genres: Array,
+  opening_themes: Array,
+  ending_themes: Array
 });
 
 const Anime = mongoose.model('anime', animeSchema);
+const userInfo = mongoose.model('userInfo', userInfoSchema);
 
-module.exports = Anime;
+module.exports = {
+  Anime,
+  userInfo
+};

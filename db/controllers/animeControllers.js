@@ -1,7 +1,11 @@
 const animeModel = require('../models/animeModels');
 
+const addNewUser = (userName, passWord, age, callback) => {
+  console.log(userName);
+};
+
 const addNewAnime = (bundle, callback) => {
-  animeModel.insertMany(bundle, (err, result) => {
+  animeModel.Anime.insertMany(bundle, (err, result) => {
     if (err) {
       callback(err, null);
     } else {
@@ -22,3 +26,4 @@ const removeFavAnime = (id, callback) => {
 
 module.exports.addNewAnime = addNewAnime;
 module.exports.removeFavAnime = removeFavAnime;
+module.exports.addNewUser = addNewUser;

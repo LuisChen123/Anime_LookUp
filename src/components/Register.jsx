@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Md5 from 'md5';
+import Axios from 'axios';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -65,15 +67,17 @@ export default function Register() {
     age: '',
     showPassWord: false,
     showComfirmPassWord: false,
-    isUserNameCorrect: false,
-    isPasswordCorrect: false,
-    isAgeCorrect: false,
+    isUserNameCorrect: '',
+    isPasswordCorrect: '',
+    isAgeCorrect: '',
     userNameErrorMessage: '',
     passwordErrorMessage: '',
     ageErrorMessage: '',
     patt: new RegExp(
       '^.*(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!.?|~])[a-zA-Z0-9@#$%^&+=!.?|~]*$'
-    )
+    ),
+    confirmationMessage: '',
+    AlertType: ''
   });
 
   // snackbar state/postion control
@@ -186,11 +190,35 @@ export default function Register() {
       value.isPasswordCorrect === false &&
       value.isUserNameCorrect === false
     ) {
-      // doing ajax here
-      console.log('123');
+      // when all state === false, it means user`s input meet the requement,doing ajax call and snackbar for successful inforamtion
+      console.log('suess');
+      handleClick();
+      setValue({
+        ...value,
+        confirmationMessage: 'Your registerion is successful!',
+        AlertType: 'success'
+      });
+      Axios.post('/register', {
+        userName: value.userName,
+        passWord: Md5(value.passWord), // use md5 to encode the password
+        age: value.age
+      })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      // when user`s infromation is not meet the requestment,snackbar the error
+      console.log('please fill the request infromation');
+      handleClick();
+      setValue({
+        ...value,
+        confirmationMessage: 'please fill the request infromation',
+        AlertType: 'error'
+      });
     }
-    // when user`s infromation is not meet the requestment
-    handleClick();
   };
 
   return (
@@ -204,7 +232,7 @@ export default function Register() {
           autoHideDuration={3000}
           onClose={handleClose}
         >
-          <Alert severity="error">please fill out request area!</Alert>
+          <Alert severity={value.AlertType}>{value.confirmationMessage}</Alert>
         </Snackbar>
         <Grid item xs={10} sm={6}>
           <Paper className={classes.paper}>
