@@ -94,9 +94,7 @@ export default function SearchBar(props) {
     });
   };
 
-  // const isLogin = () => {
-  //   if(logInState)
-  // };
+ 
   return (
     <div className={classes.grow}>
       <AppBar position="static">

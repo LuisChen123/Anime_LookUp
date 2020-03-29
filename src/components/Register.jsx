@@ -191,7 +191,7 @@ export default function Register() {
       value.isUserNameCorrect === false
     ) {
       // when all state === false, it means user`s input meet the requement,doing ajax call and snackbar for successful inforamtion
-      console.log('suess');
+
       handleClick();
       setValue({
         ...value,
@@ -205,6 +205,7 @@ export default function Register() {
       })
         .then(response => {
           console.log(response);
+          console.log('suess');
         })
         .catch(err => {
           console.log(err);

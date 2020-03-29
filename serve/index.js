@@ -29,12 +29,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/', express.static(path.join(__dirname, '../dist')));
 
 app.post('/register', (request, response) => {
-  const { userName, passWord, age } = request.body;
-  const Name = userName;
-  const Pass = passWord;
-  const Age = age;
+  const userInfo = request.body;
 
-  animeController.addNewUser(Name, Pass, Age, (err, result) => {
+  animeController.addNewUser(userInfo, (err, result) => {
     if (err) {
       response.send(err);
     } else {

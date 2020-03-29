@@ -1,7 +1,13 @@
 const animeModel = require('../models/animeModels');
 
-const addNewUser = (userName, passWord, age, callback) => {
-  console.log(userName);
+const addNewUser = (userInfo, callback) => {
+  animeModel.userInfo.insertMany(userInfo, (err, result) => {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, result);
+    }
+  });
 };
 
 const addNewAnime = (bundle, callback) => {
