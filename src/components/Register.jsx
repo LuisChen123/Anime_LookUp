@@ -56,7 +56,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Register() {
+export default function Register(props) {
   const classes = useStyles();
 
   // state
@@ -192,12 +192,6 @@ export default function Register() {
     ) {
       // when all state === false, it means user`s input meet the requement,doing ajax call and snackbar for successful inforamtion
 
-      handleClick();
-      setValue({
-        ...value,
-        confirmationMessage: 'Your registerion is successful!',
-        AlertType: 'success'
-      });
       Axios.post('/register', {
         userName: value.userName,
         passWord: Md5(value.passWord), // use md5 to encode the password
@@ -205,10 +199,32 @@ export default function Register() {
       })
         .then(response => {
           console.log(response);
-          console.log('suess');
+          if (response.data.code === 11000) {
+            setValue({
+              ...value,
+              confirmationMessage: 'username already exits!',
+              AlertType: 'warning'
+            });
+            handleClick();
+          } else if (response.data.length === 1) {
+            setValue({
+              ...value,
+              confirmationMessage: 'Resister Success!',
+              AlertType: 'success'
+            });
+            handleClick();
+            // redirect to DashBord and save this user info in the session
+            props.history.push('/');
+          }
         })
         .catch(err => {
           console.log(err);
+          setValue({
+            ...value,
+            confirmationMessage: 'sorry, there is something wrong,please try agian later!',
+            AlertType: 'warning'
+          });
+          handleClick();
         });
     } else {
       // when user`s infromation is not meet the requestment,snackbar the error
