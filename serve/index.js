@@ -28,9 +28,10 @@ app.use(bodyParser.json()); // conveart to json file
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/', express.static(path.join(__dirname, '../dist')));
 
+// register user
 app.post('/register', (request, response) => {
   const userInfo = request.body;
-
+  // add this new user information to databse
   animeController.addNewUser(userInfo, (err, result) => {
     if (err) {
       response.send(err);
@@ -39,6 +40,11 @@ app.post('/register', (request, response) => {
       response.send(result);
     }
   });
+});
+
+app.post('/login', (request, response) => {
+  const userInfo = request.body;
+  console.log(userInfo);
 });
 
 app.get('/api/add', (request, response) => {

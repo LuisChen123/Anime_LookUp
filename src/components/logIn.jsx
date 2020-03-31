@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -15,7 +15,9 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-
+import Axios from 'axios';
+import Md5 from 'md5';
+import store from '../store';
 // alert component
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -57,14 +59,20 @@ const useStyles = makeStyles(theme => ({
 export default function Login() {
   const classes = useStyles();
 
+  useEffect(() => {
+    console.log(store.getState());
+  }, []);
+
   // state
   const [value, setValue] = useState({
     userName: '',
     passWord: '',
     showPassWord: false,
-    error: false,
-    userNameOrPassWordErrorMessage: '',
-    userNameEmptyErrorMessage: '',
+    userNameError: false,
+    passWordError: false,
+    userNameEmptyMessage: '',
+    passWordEmptyMessage: '',
+    userNameOrPassWordErrorMessage,
     patt: new RegExp(
       '^.*(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!.?|~])[a-zA-Z0-9@#$%^&+=!.?|~]*$'
     )
@@ -77,7 +85,15 @@ export default function Login() {
     horizontal: 'center'
   });
 
+  // shotcut
   const { vertical, horizontal, open } = state;
+  const {
+    userName,
+    passWord,
+    userNameError,
+    passWordError,
+    userNameOrPassWordErrorMessage
+  } = value;
 
   // handle alert popup
   const handleClick = () => {
@@ -98,7 +114,66 @@ export default function Login() {
     setValue({ ...value, showPassWord: !value.showPassWord });
   };
 
-  // handle show or hide ComfirmPasword
+  const handleUserNameRule = () => {
+    if (userName.trim() === '') {
+      setValue({
+        ...value,
+        userNameEmptyMessage: 'username can`t be empty!',
+        userNameError: true
+      });
+    } else {
+      setValue({
+        ...value,
+        userNameEmptyMessage: '',
+        userNameError: false
+      });
+    }
+  };
+
+  const handlePasswordRule = () => {
+    if (value.passWord.trim() === '') {
+      setValue({
+        ...value,
+        passWordEmptyMessage: 'password can`t be empty',
+        passWordError: true
+      });
+    } else {
+      setValue({
+        ...value,
+        passWordEmptyMessage: '',
+        passWordError: false
+      });
+    }
+  };
+
+  const handleSubmitCheck = () => {
+    if (userName.trim() === '') {
+      setValue({
+        ...value,
+        userNameEmptyMessage: 'username can`t be empty!',
+        userNameError: true
+      });
+    } else {
+      setValue({
+        ...value,
+        userNameEmptyMessage: '',
+        userNameError: false
+      });
+    }
+    if (passWord.trim() === '') {
+      setValue({
+        ...value,
+        passWordEmptyMessage: 'password can`t be empty',
+        passWordError: true
+      });
+    } else {
+      setValue({
+        ...value,
+        passWordEmptyMessage: '',
+        passWordError: false
+      });
+    }
+  };
 
   // disable default
   const handleMouseDownPassword = event => {
@@ -106,19 +181,23 @@ export default function Login() {
   };
 
   const handleSubmit = () => {
-    if (value.userName.trim() === '' || value.passWord.trim() === '') {
+    handleSubmitCheck();
+    if (userNameError === false && passWordError === false && passWord !== '' && userName !== '') {
+      Axios.post('/login', {
+        username: userName.trim(),
+        passWord: Md5(value.passWord)
+      })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    } else {
+      handleClick();
       setValue({
-        ...value,
-        error: true,
-        userNamePasswodEmptyMessage: 'can`t be empty!'
+        userNameOrPassWordErrorMessage: 'please fix error before submit!'
       });
-    } else if (value.userName.trim() !== '' && value.passWord.trim() !== '') {
-      setValue({
-        ...value,
-        error: false
-      });
-
-      // ajax
     }
   };
 
@@ -151,8 +230,9 @@ export default function Login() {
                   color="primary"
                   autoComplete="current-username"
                   onChange={handleChange('userName')}
-                  error={value.error}
-                  helperText={value.error ? value.userNamePasswodEmptyMessage : null}
+                  onKeyUp={handleUserNameRule}
+                  error={value.userNameError}
+                  helperText={value.userNameError ? value.userNameEmptyMessage : null}
                   shrink="true"
                 />
                 <TextField
@@ -163,9 +243,10 @@ export default function Login() {
                   type={value.showPassWord ? 'text' : 'password'}
                   autoComplete="current-password"
                   variant="filled"
-                  error={value.error}
-                  helperText={value.error ? value.userNamePasswodEmptyMessage : null}
+                  error={value.passWordError}
+                  helperText={value.passWordError ? value.passWordEmptyMessage : null}
                   onChange={handleChange('passWord')}
+                  onKeyUp={handlePasswordRule}
                   shrink="true"
                   InputProps={{
                     endAdornment: (

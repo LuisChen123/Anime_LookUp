@@ -40,6 +40,7 @@ export default function App(props) {
 
   useEffect(() => {
     console.log(props);
+    console.log(store.getState());
   }, []);
 
   const getAnimatData = () => {

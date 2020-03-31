@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { HashRouter as Router, Route, BrowserRouter, Redirect } from 'react-router-dom';
 
@@ -14,9 +14,7 @@ import Login from './src/components/Login';
 
 import Register from './src/components/Register';
 
-const loggedIn = true;
-
-const BasicRoute = () => (
+const BasicRoute = props => (
   <Router history={BrowserRouter}>
     <CacheSwitch>
       <CacheRoute exact path="/register" component={Register} />
