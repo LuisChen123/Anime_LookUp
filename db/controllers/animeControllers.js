@@ -10,6 +10,18 @@ const addNewUser = (userInfo, callback) => {
   });
 };
 
+const userLogin = bundle => {
+  const name = bundle.username;
+  return animeModel.userInfo
+    .findOne({ userName: name })
+    .then(result => {
+      return result;
+    })
+    .catch(error => {
+      return `error: ${error}`;
+    });
+};
+
 const addNewAnime = (bundle, callback) => {
   animeModel.Anime.insertMany(bundle, (err, result) => {
     if (err) {
@@ -33,3 +45,4 @@ const removeFavAnime = (id, callback) => {
 module.exports.addNewAnime = addNewAnime;
 module.exports.removeFavAnime = removeFavAnime;
 module.exports.addNewUser = addNewUser;
+module.exports.userLogin = userLogin;

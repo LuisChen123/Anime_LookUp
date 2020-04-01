@@ -42,9 +42,30 @@ app.post('/register', (request, response) => {
   });
 });
 
+// handle user login authertion
 app.post('/login', (request, response) => {
   const userInfo = request.body;
-  console.log(userInfo);
+  const userPassWord = request.body.password;
+
+  animeController
+    .userLogin(userInfo)
+    .then(result => {
+      if (result === null) {
+        // 0 means there is no such user
+        response.send('0');
+      } else if (result !== undefined && result.passWord !== userPassWord) {
+        // 1 means the password is not correct
+        response.send('1');
+      } else if (result !== undefined && result.passWord !== userPassWord) {
+        // 2 means the password is correct
+        response.send('2');
+      }
+    })
+    .catch(error => {
+      // 3 means there is something wrong with database
+      console.log(error);
+      response.send('3');
+    });
 });
 
 app.get('/api/add', (request, response) => {
