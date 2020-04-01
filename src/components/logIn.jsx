@@ -18,6 +18,8 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Axios from 'axios';
 import Md5 from 'md5';
 import store from '../store';
+import { getUserLogin, handleStoreUserInfo } from '../store/actionCreator';
+
 // alert component
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -75,8 +77,17 @@ export default function Login() {
     userNameOrPassWordErrorMessage,
     patt: new RegExp(
       '^.*(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!.?|~])[a-zA-Z0-9@#$%^&+=!.?|~]*$'
-    )
+    ),
+    isLogin: true
   });
+
+  const {
+    userName,
+    passWord,
+    userNameError,
+    passWordError,
+    userNameOrPassWordErrorMessage
+  } = value;
 
   // snackbar state/postion control
   const [state, setState] = React.useState({
@@ -87,13 +98,6 @@ export default function Login() {
 
   // shotcut
   const { vertical, horizontal, open } = state;
-  const {
-    userName,
-    passWord,
-    userNameError,
-    passWordError,
-    userNameOrPassWordErrorMessage
-  } = value;
 
   // handle alert popup
   const handleClick = () => {
@@ -180,6 +184,18 @@ export default function Login() {
     event.preventDefault();
   };
 
+  // use redux to change login status
+  const handleUserLogin = () => {
+    const action = getUserLogin(value.isLogin);
+    store.dispatch(action);
+  };
+
+  // store user info in the Redux;
+  const handleStoreInfo = userInfo => {
+    const action = handleStoreUserInfo(userInfo);
+    store.dispatch(action);
+  };
+
   const handleSubmit = () => {
     handleSubmitCheck();
     if (userNameError === false && passWordError === false && passWord !== '' && userName !== '') {
@@ -189,6 +205,26 @@ export default function Login() {
       })
         .then(response => {
           console.log(response);
+          switch (response.data.status) {
+            case 0:
+              console.log('there is no such user');
+              break;
+            case 1:
+              console.log('password is not correct');
+              break;
+            case 2:
+              console.log('password is correct');
+              // store user info in the Redux
+              handleStoreInfo(response.data.result);
+              // change isLogin in Globe
+              handleUserLogin();
+              break;
+            case 3:
+              console.log('means there is something wrong with database');
+              break;
+            default:
+              console.log('something is wroing');
+          }
         })
         .catch(error => {
           console.log(error);

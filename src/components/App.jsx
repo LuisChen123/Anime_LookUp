@@ -38,10 +38,10 @@ export default function App(props) {
   const [cardNumbers, setCardNumbers] = useState(16);
   const [wait, setWait] = useState(false);
 
-  useEffect(() => {
-    console.log(props);
-    console.log(store.getState());
-  }, []);
+  // useEffect(() => {
+  //   console.log(props);
+  //   console.log(store.getState());
+  // }, []);
 
   const getAnimatData = () => {
     Axios.get(`https://api.jikan.moe/v3/search/anime?q=${keyWord}&limit=${cardNumbers}`)

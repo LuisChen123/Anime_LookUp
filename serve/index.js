@@ -45,26 +45,27 @@ app.post('/register', (request, response) => {
 // handle user login authertion
 app.post('/login', (request, response) => {
   const userInfo = request.body;
-  const userPassWord = request.body.password;
+  const userPassWord = request.body.passWord;
+  console.log(userPassWord);
 
   animeController
     .userLogin(userInfo)
     .then(result => {
       if (result === null) {
         // 0 means there is no such user
-        response.send('0');
-      } else if (result !== undefined && result.passWord !== userPassWord) {
+        response.send({ status: 0 });
+      } else if (result.passWord !== userPassWord) {
         // 1 means the password is not correct
-        response.send('1');
-      } else if (result !== undefined && result.passWord !== userPassWord) {
+        response.send({ status: 1 });
+      } else if (result.passWord === userPassWord) {
         // 2 means the password is correct
-        response.send('2');
+        response.send({ status: 2, result });
       }
     })
     .catch(error => {
       // 3 means there is something wrong with database
       console.log(error);
-      response.send('3');
+      response.send({ status: 3 });
     });
 });
 
