@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 
 import { HashRouter as Router, Route, BrowserRouter, Redirect } from 'react-router-dom';
 
@@ -10,46 +10,66 @@ import DashBoard from './src/components/App';
 
 import Detail from './src/components/childComponents/AnimeDetailPage';
 
-import NavBar from './src/components/NavBar';
-
 import Login from './src/components/Login';
 
 import Register from './src/components/Register';
 
-class Routers extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = store.getState();
-    this.handleLogin = this.handleLogin.bind(this);
-    store.subscribe(this.handleLogin);
-    console.log(this.state.get('isLogin'));
-  }
+// class Routers extends PureComponent {
+//   constructor(props) {
+//     super(props);
+//     this.state = store.getState();
+//     this.handleLogin = this.handleLogin.bind(this);
+//     store.subscribe(this.handleLogin);
+//   }
 
-  handleLogin() {
-    console.log('store changed');
-  }
+//   handleLogin() {
+//     console.log('store changed');
+//   }
 
-  // auth() {
+//   render() {
+//     return (
+//       <Router history={BrowserRouter}>
+//         <CacheSwitch>
+//           <CacheRoute
+//             history={BrowserRouter}
+//             exact
+//             path="/"
+//             component={() => (this.state.get('isLogin') ? <DashBoard /> : <Redirect to="/login" />)}
+//           />
+//           <CacheRoute exact path="/register" component={Register} />
+//           <CacheRoute
+//             history={BrowserRouter}
+//             exact
+//             path="/login"
+//             component={() => (this.state.get('isLogin') ? <Redirect to="/" /> : <Login />)}
+//           />
+//           <CacheRoute
+//             history={BrowserRouter}
+//             exact
+//             path="/detail/:id"
+//             component={() => (this.state.get('isLogin') ? <Detail /> : <Redirect to="/login" />)}
+//           />
+//         </CacheSwitch>
+//       </Router>
+//     );
+//   }
+// }
 
-  //   return isLogin ? <DashBoard /> : <Redirect to="/login" />;
-  // }
+// export default Routers;
 
-  render() {
-    return (
-      <Router history={BrowserRouter}>
-        <CacheSwitch>
-          <CacheRoute
-            exact
-            path="/"
-            component={() => (this.state.get('isLogin') ? <DashBoard /> : <Redirect to="/login" />)}
-          />
-          <CacheRoute exact path="/register" component={Register} />
-          <CacheRoute exact path="/login" component={Login} />
-          <CacheRoute exact path="/detail/:id" component={Detail} />
-        </CacheSwitch>
-      </Router>
-    );
-  }
-}
+const BasicRoute = props => (
+  <Router history={BrowserRouter}>
+    <CacheSwitch>
+      <CacheRoute
+        exact
+        path="/login"
+        component={() => (store.getState().get('isLogin') ? <Redirect to="/" /> : <Login />)}
+      />
+      <CacheRoute exact path="/register" component={Register} />
+      <CacheRoute exact path="/" component={DashBoard} />
+      <CacheRoute exact path="/detail/:id" component={Detail} />
+    </CacheSwitch>
+  </Router>
+);
 
-export default Routers;
+export default BasicRoute;
