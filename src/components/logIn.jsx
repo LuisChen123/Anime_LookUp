@@ -60,11 +60,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function Login() {
   const classes = useStyles();
-
-  useEffect(() => {
-    console.log(store.getState());
-  }, []);
-
   // state
   const [value, setValue] = useState({
     userName: '',
