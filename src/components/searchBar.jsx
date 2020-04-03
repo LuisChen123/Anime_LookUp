@@ -94,7 +94,6 @@ export default function SearchBar(props) {
     });
   };
 
- 
   return (
     <div className={classes.grow}>
       <AppBar position="static">

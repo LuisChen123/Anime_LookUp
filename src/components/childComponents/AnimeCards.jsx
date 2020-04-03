@@ -89,7 +89,6 @@ export default function AnimeCards(props) {
   };
 
   const handleJump = data => {
-    console.log(data);
     props.history.push({
       pathname: `/detail/${props.animatData.mal_id}`
     });

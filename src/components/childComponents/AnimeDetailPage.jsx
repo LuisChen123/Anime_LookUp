@@ -3,6 +3,7 @@ import Axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import NavBar from '../NavBar';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -124,6 +125,7 @@ export default function AnimeDetailPage(props) {
 
   return (
     <div className={classes.root}>
+      <NavBar />
       <Grid container spacing={3}>
         <Grid item xs={1} sm={1} />
         <Grid item xs={10} sm={10}>
