@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -58,7 +58,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Login() {
+export default function Login(props) {
+  useEffect(() => {
+    console.log(props);
+  });
+
   const classes = useStyles();
   // state
   const [value, setValue] = useState({
@@ -74,6 +78,7 @@ export default function Login() {
       '^.*(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!.?|~])[a-zA-Z0-9@#$%^&+=!.?|~]*$'
     ),
     isLogin: true
+    // when user password is march our record, we send this to redux.don`t delete it,
   });
 
   const {
@@ -179,16 +184,12 @@ export default function Login() {
     event.preventDefault();
   };
 
-  // use redux to change login status
-  const handleUserLogin = () => {
-    const action = getUserLogin(value.isLogin);
-    store.dispatch(action);
-  };
-
-  // store user info in the Redux;
+  // store user info in the Redux,   use redux to change login status
   const handleStoreInfo = userInfo => {
     const action = handleStoreUserInfo(userInfo);
     store.dispatch(action);
+    const xaction = getUserLogin(value.isLogin);
+    store.dispatch(xaction);
   };
 
   const handleSubmit = () => {
@@ -213,6 +214,7 @@ export default function Login() {
               handleStoreInfo(response.data.result);
               // change isLogin in Globe
               handleUserLogin();
+
               break;
             case 3:
               console.log('means there is something wrong with database');

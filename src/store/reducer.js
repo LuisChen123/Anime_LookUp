@@ -2,7 +2,7 @@ import { fromJS } from 'immutable';
 import { CHANGE_USER_LOGIN, STORE_USER_INFO } from './actionType';
 
 const defaultState = fromJS({
-  isLogin: true,
+  isLogin: false,
   userInfo: {}
 });
 

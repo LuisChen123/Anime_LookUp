@@ -125,7 +125,7 @@ export default function AnimeDetailPage(props) {
 
   return (
     <div className={classes.root}>
-      <NavBar />
+      <NavBar history={props} />
       <Grid container spacing={3}>
         <Grid item xs={1} sm={1} />
         <Grid item xs={10} sm={10}>

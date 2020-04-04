@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -7,7 +7,6 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { Link } from 'react-router-dom';
 import store from '../store';
 
 const useStyles = makeStyles(theme => ({
@@ -43,11 +42,15 @@ export default function NavBar(props) {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar className={classes.asd}>
-          <Link to="/">
-            <IconButton aria-label="ArrowBack">
-              <ArrowBackIcon htmlColor="#fff" />
-            </IconButton>
-          </Link>
+          <IconButton
+            aria-label="ArrowBack"
+            onClick={() => {
+              props.history.history.goBack();
+            }}
+          >
+            <ArrowBackIcon htmlColor="#fff" />
+          </IconButton>
+
           <IconButton
             edge="start"
             className={classes.menuButton}
@@ -69,9 +72,9 @@ export default function NavBar(props) {
             <MenuItem onClick={handleClose}>My Anime</MenuItem>
             <MenuItem onClick={handleClose}>My account</MenuItem>
             {store.getState().get('isLogin') ? (
-              <MenuItem onClick={handleClose}>Login</MenuItem>
+              <MenuItem onClick={handleClose}>Log out</MenuItem>
             ) : (
-              <MenuItem onClick={handleClose}>Logout</MenuItem>
+              <MenuItem onClick={handleClose}>Log In</MenuItem>
             )}
           </Menu>
         </Toolbar>

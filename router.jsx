@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { HashRouter as Router, Route, BrowserRouter, Redirect } from 'react-router-dom';
+import { HashRouter as Router, BrowserRouter, Redirect, withRouter } from 'react-router-dom';
 
 import CacheRoute, { CacheSwitch } from 'react-router-cache-route';
 
@@ -19,14 +19,18 @@ const BasicRoute = props => (
     <CacheSwitch>
       <CacheRoute
         exact
-        path="/login"
+        path="/"
         component={() => (store.getState().get('isLogin') ? <Redirect to="/" /> : <Login />)}
       />
+      <CacheRoute
+        exact
+        path="/login"
+        component={() => (store.getState().get('isLogin') ? <DashBoard /> : <Redirect to="/" />)}
+      />
       <CacheRoute exact path="/register" component={Register} />
-      <CacheRoute exact path="/" component={DashBoard} />
       <CacheRoute exact path="/detail/:id" component={Detail} />
     </CacheSwitch>
   </Router>
 );
 
-export default BasicRoute;
+export default withRouter(BasicRoute);
