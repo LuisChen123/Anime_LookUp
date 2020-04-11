@@ -1,4 +1,4 @@
-# My Anime Lise .
+# My Anime List
 
 > This is a full-stack app that using api from [Jikan](https://jikan.moe/)
 >
